@@ -27,15 +27,12 @@ import {
   Add as AddIcon,
   Storage as StorageIcon,
   People as PeopleIcon,
-  Settings as SettingsIcon,
-  Visibility as VisibilityIcon,
   Edit as EditIcon,
   MoreVert as MoreVertIcon,
   RestoreFromTrash as RestoreIcon,
   DeleteForever as DeleteForeverIcon,
   Block as BlockIcon,
-  Sync as SyncIcon,
-  Refresh as RefreshIcon
+  Sync as SyncIcon
 } from '@mui/icons-material';
 import axios from 'axios';
 
