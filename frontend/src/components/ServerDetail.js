@@ -35,7 +35,6 @@ import {
   ArrowBack as ArrowBackIcon,
   Storage as StorageIcon,
   People as PeopleIcon,
-
   GetApp as DownloadIcon,
   GetApp,
   Edit as EditIcon,
@@ -104,7 +103,7 @@ const ServerDetail = () => {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [id, autoRefresh, fetchServerData, fetchConnectionStatus]);
+  }, [id, autoRefresh]);
 
   const fetchServerData = async () => {
     try {
