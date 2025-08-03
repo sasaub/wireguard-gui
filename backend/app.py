@@ -1721,6 +1721,11 @@ def delete_static_route(server_id, route_id):
     
     return jsonify({'message': 'Static route deleted successfully'})
 
+# Root endpoint for healthcheck
+@app.route('/')
+def root():
+    return jsonify({'status': 'ok', 'message': 'WireGuard GUI API is running'})
+
 # Import and register personalized client blueprint
 from personalized_client_api import init_personalized_client_app
 init_personalized_client_app(app)
