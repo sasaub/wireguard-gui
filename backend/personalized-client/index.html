@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WireGuard Klijent - MicroElectronic</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header sa logom -->
+        <header class="app-header">
+            <div class="logo-container">
+                <img src="assets/logo.png" alt="MicroElectronic" class="logo">
+                <h1 class="company-name">MicroElectronic</h1>
+            </div>
+            <h2 class="app-title">WireGuard VPN Klijent</h2>
+        </header>
+
+        <!-- Glavni sadržaj -->
+        <main class="main-content">
+            <!-- Status kartica -->
+            <div class="status-card">
+                <div class="status-header">
+                    <h3>Status Povezivanja</h3>
+                </div>
+                
+                <div class="status-indicator">
+                    <div class="status-icon" id="status-icon">🔴</div>
+                    <div class="status-text" id="status-text">Nepovezan</div>
+                </div>
+                
+                <div class="connection-info" id="connection-info" style="display: none;">
+                    <div class="info-item">
+                        <span class="info-label">IP Adresa:</span>
+                        <span class="info-value" id="ip-address">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Server:</span>
+                        <span class="info-value" id="server-name">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Vreme povezivanja:</span>
+                        <span class="info-value" id="connection-time">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kontrole -->
+            <div class="controls-card">
+                <div class="button-group">
+                    <button id="connect-btn" class="btn btn-primary">
+                        <span class="btn-icon">🔗</span>
+                        <span class="btn-text">Poveži</span>
+                    </button>
+                    <button id="disconnect-btn" class="btn btn-secondary" disabled>
+                        <span class="btn-icon">🔌</span>
+                        <span class="btn-text">Odvoji</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dodatne informacije -->
+            <div class="info-card">
+                <h3>O aplikaciji</h3>
+                <p>Ova aplikacija omogućava sigurno povezivanje sa korporativnom mrežom putem WireGuard VPN protokola.</p>
+                <p><strong>Razvijeno od strane:</strong> MicroElectronic</p>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>&copy; 2024 MicroElectronic. Sva prava zadržana.</p>
+        </footer>
+    </div>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Povezivanje...</p>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification" style="display: none;">
+        <span id="notification-text"></span>
+        <button class="notification-close" onclick="hideNotification()">×</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html> 

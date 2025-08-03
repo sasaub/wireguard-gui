@@ -1,0 +1,18 @@
+[Unit]
+Description=WireGuard GUI Backend
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/wireguard-gui/backend
+Environment=PATH=/opt/wireguard-gui/backend/venv/bin:/usr/bin:/usr/local/bin
+ExecStart=/opt/wireguard-gui/backend/venv/bin/python app.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target 

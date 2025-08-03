@@ -1,0 +1,7 @@
+Ver 1.1
+
+- radi citanje servera sa mikrotika
+- radi pracenje aktivne veze peerova zelena aktivna, crvena neaktivna
+- radi dodavanje servera i peerova
+- radi brisanje peerova i servera ( problem kod brisanja servera ostaju njegovi peerovi)
+- radi belezenje protoka peerova kumulativno

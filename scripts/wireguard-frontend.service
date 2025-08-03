@@ -1,0 +1,18 @@
+[Unit]
+Description=WireGuard GUI Frontend
+After=network.target wireguard-backend.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/wireguard-gui/frontend
+Environment=PATH=/opt/wireguard-gui/frontend/node_modules/.bin:/usr/bin:/bin
+ExecStart=/usr/bin/npm start
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target 
