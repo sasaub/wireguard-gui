@@ -23,7 +23,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Divider,
   Menu,
   MenuItem,
   ListItemIcon
@@ -36,7 +35,7 @@ import {
   ArrowBack as ArrowBackIcon,
   Storage as StorageIcon,
   People as PeopleIcon,
-  Speed as SpeedIcon,
+
   GetApp as DownloadIcon,
   GetApp,
   Edit as EditIcon,
@@ -84,8 +83,6 @@ const ServerDetail = () => {
   
   // Menu states
   const [serverMenuAnchor, setServerMenuAnchor] = useState(null);
-  const [peerMenuAnchor, setPeerMenuAnchor] = useState(null);
-  const [selectedPeerForMenu, setSelectedPeerForMenu] = useState(null);
 
   const [connectionStatus, setConnectionStatus] = useState(null);
   const [statusLoading, setStatusLoading] = useState(false);
@@ -182,7 +179,7 @@ const ServerDetail = () => {
   const handleUpdatePeer = async () => {
     try {
       setError('');
-      const response = await axios.put(`/api/servers/${id}/peers/${editingPeer.id}`, editingPeerData);
+      await axios.put(`/api/servers/${id}/peers/${editingPeer.id}`, editingPeerData);
       
       setPeers(peers.map(peer => 
         peer.id === editingPeer.id 

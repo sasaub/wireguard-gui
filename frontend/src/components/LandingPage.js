@@ -13,8 +13,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Chip,
-  Divider
+  Chip
 } from '@mui/material';
 import {
   Security as SecurityIcon,
