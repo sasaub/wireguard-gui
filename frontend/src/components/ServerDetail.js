@@ -99,7 +99,7 @@ const ServerDetail = () => {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [id, autoRefresh]);
+  }, [id, autoRefresh, fetchServerData, fetchConnectionStatus]);
 
   const fetchServerData = async () => {
     try {
