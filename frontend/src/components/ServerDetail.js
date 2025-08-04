@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -85,24 +85,7 @@ const ServerDetail = () => {
   const [lastRefresh, setLastRefresh] = useState(null);
   const [serverMenuAnchor, setServerMenuAnchor] = useState(null);
 
-  useEffect(() => {
-    fetchServerData();
-    fetchConnectionStatus();
-    
-    // Auto refresh every 15 seconds if enabled
-    let interval;
-    if (autoRefresh) {
-      interval = setInterval(() => {
-        fetchConnectionStatus();
-      }, 15000); // 15 seconds
-    }
-    
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [id, autoRefresh, fetchServerData, fetchConnectionStatus]);
-
-  const fetchServerData = async () => {
+  const fetchServerData = useCallback(async () => {
     try {
       const [serverResponse, peersResponse, routesResponse] = await Promise.all([
         axios.get(`/api/servers/${id}`),
@@ -119,9 +102,9 @@ const ServerDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
 
-  const fetchConnectionStatus = async () => {
+  const fetchConnectionStatus = useCallback(async () => {
     try {
       setStatusLoading(true);
       const response = await axios.get(`/api/servers/${id}/connection-status`);
@@ -133,7 +116,24 @@ const ServerDetail = () => {
     } finally {
       setStatusLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchServerData();
+    fetchConnectionStatus();
+    
+    // Auto refresh every 15 seconds if enabled
+    let interval;
+    if (autoRefresh) {
+      interval = setInterval(() => {
+        fetchConnectionStatus();
+      }, 15000); // 15 seconds
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [id, autoRefresh, fetchServerData, fetchConnectionStatus]);
 
   const handleCreatePeer = async () => {
     try {
