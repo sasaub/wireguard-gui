@@ -83,6 +83,7 @@ const ServerDetail = () => {
   const [statusLoading, setStatusLoading] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [lastRefresh, setLastRefresh] = useState(null);
+  const [serverMenuAnchor, setServerMenuAnchor] = useState(null);
 
   useEffect(() => {
     fetchServerData();
