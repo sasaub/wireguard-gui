@@ -36,7 +36,6 @@ import {
   Storage as StorageIcon,
   People as PeopleIcon,
   GetApp as DownloadIcon,
-  GetApp,
   Edit as EditIcon,
   MoreVert as MoreVertIcon,
   RestoreFromTrash as RestoreIcon,
@@ -80,9 +79,6 @@ const ServerDetail = () => {
     allowed_ips_from_peer: '' 
   });
   
-  // Menu states
-  const [serverMenuAnchor, setServerMenuAnchor] = useState(null);
-
   const [connectionStatus, setConnectionStatus] = useState(null);
   const [statusLoading, setStatusLoading] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
@@ -655,7 +651,7 @@ const ServerDetail = () => {
                                     onClick={() => handleGeneratePersonalizedClient(peer)}
                                     color="primary"
                                   >
-                                    <GetApp />
+                                    <DownloadIcon />
                                   </IconButton>
                                 </Tooltip>
                                 <Tooltip title="Uredi peer">
