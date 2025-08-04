@@ -1,0 +1,3 @@
+[33mc692510[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Trigger Railway redeploy
+[33m7a16b1c[m Fix useEffect dependencies in ServerDetail.js
+[33mf30eda6[m Fix ESLint errors and update UI text from MikroTik to Server
