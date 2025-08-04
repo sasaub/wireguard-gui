@@ -9036,4 +9036,5 @@ scp -r . administrator@IP_PROXMOX_RACUNARA:/tmp/wireguard-gui/
 
 ### 4. Kopiranje sa Proxmox-a na Debian VM
 ```bash
-# Pristupite Proxmox računaru preko SSH
+# Pristupite Proxmox računaru preko SSH#   R a i l w a y   r e d e p l o y   t r i g g e r  
+ 
