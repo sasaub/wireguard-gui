@@ -1405,7 +1405,9 @@ def sync_mikrotik():
                 
                 # Get peers for this interface
                 peers = mikrotik_legacy.get_wireguard_peers(interface['name'])
+                print(f"Found {len(peers)} peers for interface {interface['name']}")
                 for peer in peers:
+                    print(f"Processing peer: {peer}")
                     peer_obj = WireGuardPeer(
                         name=peer.get('comment', f"Peer {peer['id']}"),
                         public_key=peer.get('public-key', ''),
@@ -1415,6 +1417,7 @@ def sync_mikrotik():
                         is_active=True
                     )
                     db.session.add(peer_obj)
+                    print(f"Added peer: {peer_obj.name}")
                 
                 synced_count += 1
         
