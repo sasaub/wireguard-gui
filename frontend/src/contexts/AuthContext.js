@@ -1,6 +1,11 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Set base URL for production
+if (process.env.NODE_ENV === 'production') {
+  axios.defaults.baseURL = 'https://wireguard-gui-production-57a7.up.railway.app';
+}
+
 const AuthContext = createContext();
 
 export const useAuth = () => {
