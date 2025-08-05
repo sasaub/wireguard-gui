@@ -1732,7 +1732,36 @@ init_personalized_client_app(app)
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
+        # Reset database if requested
+        if os.environ.get('RESET_DB') == 'true':
+            print("Resetting database...")
+            db.drop_all()
+            db.create_all()
+            print("Database reset completed")
+        else:
+            db.create_all()
+        
+        # Run database migration
+        try:
+            # Direct migration using SQLAlchemy
+            with db.engine.connect() as conn:
+                # Check if columns exist
+                result = conn.execute("PRAGMA table_info(wire_guard_peer)")
+                columns = [row[1] for row in result.fetchall()]
+                
+                # Add missing columns if they don't exist
+                if 'allowed_ips_to_peer' not in columns:
+                    conn.execute("ALTER TABLE wire_guard_peer ADD COLUMN allowed_ips_to_peer TEXT")
+                    print("Added allowed_ips_to_peer column")
+                
+                if 'allowed_ips_from_peer' not in columns:
+                    conn.execute("ALTER TABLE wire_guard_peer ADD COLUMN allowed_ips_from_peer TEXT")
+                    print("Added allowed_ips_from_peer column")
+                
+                conn.commit()
+                print("Database migration completed")
+        except Exception as e:
+            print(f"Migration failed: {e}")
         
         # Create default admin user if not exists
         admin = User.query.filter_by(username='admin').first()
