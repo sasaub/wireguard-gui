@@ -1899,7 +1899,8 @@ def auto_sync_on_startup():
                     ).first()
                     
                     if existing_peer:
-                        print(f"Peer {peer.get('comment', f'Peer {peer[\"id\"]}')} already exists, skipping...")
+                        peer_name = peer.get('comment', f"Peer {peer['id']}")
+                        print(f"Peer {peer_name} already exists, skipping...")
                     else:
                         peer_obj = WireGuardPeer(
                             name=peer.get('comment', f"Peer {peer['id']}"),
