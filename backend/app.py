@@ -1841,4 +1841,66 @@ if __name__ == '__main__':
     
     # Railway deployment configuration
     port = int(os.environ.get('PORT', config['app']['port']))
-    app.run(debug=False, host='0.0.0.0', port=port) 
+    app.run(debug=False, host='0.0.0.0', port=port)
+
+# Auto-sync from MikroTik on startup (for Railway deployment)
+@app.before_first_request
+def auto_sync_on_startup():
+    with app.app_context():
+        try:
+            print("Auto-syncing from MikroTik on first request...")
+            mikrotik_legacy = MikroTikLegacyAPI(
+                host=config['mikrotik']['host'],
+                username=config['mikrotik']['username'],
+                password=config['mikrotik']['password'],
+                port=8728
+            )
+            
+            # Get existing interfaces from MikroTik
+            interfaces = mikrotik_legacy.get_wireguard_interfaces()
+            synced_count = 0
+            
+            for interface in interfaces:
+                # Check if server already exists
+                existing_server = WireGuardServer.query.filter_by(
+                    interface_name=interface['name']
+                ).first()
+                
+                if not existing_server:
+                    # Create new server
+                    server = WireGuardServer(
+                        name=f"Imported {interface['name']}",
+                        interface_name=interface['name'],
+                        private_key=interface.get('private-key', ''),
+                        public_key=interface.get('public-key', ''),
+                        listen_port=int(interface.get('listen-port', 51820)),
+                        address=interface.get('address', '10.0.0.1/24'),
+                        user_id=1,  # Use admin user ID
+                        is_active=interface.get('disabled', 'true') == 'false'
+                    )
+                    db.session.add(server)
+                    db.session.flush()  # Get server ID
+                    
+                    # Get peers for this interface
+                    peers = mikrotik_legacy.get_wireguard_peers(interface['name'])
+                    print(f"Found {len(peers)} peers for interface {interface['name']}")
+                    for peer in peers:
+                        print(f"Processing peer: {peer}")
+                        peer_obj = WireGuardPeer(
+                            name=peer.get('comment', f"Peer {peer['id']}"),
+                            public_key=peer.get('public-key', ''),
+                            private_key='',  # We don't have private keys for existing peers
+                            allowed_ips=peer.get('allowed-address', ''),
+                            server_id=server.id,
+                            is_active=True
+                        )
+                        db.session.add(peer_obj)
+                        print(f"Added peer: {peer_obj.name}")
+                    
+                    synced_count += 1
+            
+            db.session.commit()
+            print(f"Auto-sync completed: {synced_count} servers imported")
+            
+        except Exception as e:
+            print(f"Auto-sync failed: {e}") 
