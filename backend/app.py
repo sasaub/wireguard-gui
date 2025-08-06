@@ -1861,12 +1861,17 @@ def auto_sync_on_startup():
             synced_count = 0
             
             for interface in interfaces:
+                print(f"Processing interface: {interface['name']}")
                 # Check if server already exists
                 existing_server = WireGuardServer.query.filter_by(
                     interface_name=interface['name']
                 ).first()
                 
-                if not existing_server:
+                if existing_server:
+                    print(f"Server {interface['name']} already exists, adding peers...")
+                    server = existing_server
+                else:
+                    print(f"Server {interface['name']} does not exist, creating...")
                     # Create new server
                     server = WireGuardServer(
                         name=f"Imported {interface['name']}",
@@ -1880,12 +1885,22 @@ def auto_sync_on_startup():
                     )
                     db.session.add(server)
                     db.session.flush()  # Get server ID
+                    synced_count += 1
+                
+                # Get peers for this interface (for both new and existing servers)
+                peers = mikrotik_legacy.get_wireguard_peers(interface['name'])
+                print(f"Found {len(peers)} peers for interface {interface['name']}")
+                for peer in peers:
+                    print(f"Processing peer: {peer}")
+                    # Check if peer already exists
+                    existing_peer = WireGuardPeer.query.filter_by(
+                        public_key=peer.get('public-key', ''),
+                        server_id=server.id
+                    ).first()
                     
-                    # Get peers for this interface
-                    peers = mikrotik_legacy.get_wireguard_peers(interface['name'])
-                    print(f"Found {len(peers)} peers for interface {interface['name']}")
-                    for peer in peers:
-                        print(f"Processing peer: {peer}")
+                    if existing_peer:
+                        print(f"Peer {peer.get('comment', f'Peer {peer[\"id\"]}')} already exists, skipping...")
+                    else:
                         peer_obj = WireGuardPeer(
                             name=peer.get('comment', f"Peer {peer['id']}"),
                             public_key=peer.get('public-key', ''),
@@ -1896,8 +1911,6 @@ def auto_sync_on_startup():
                         )
                         db.session.add(peer_obj)
                         print(f"Added peer: {peer_obj.name}")
-                    
-                    synced_count += 1
             
             db.session.commit()
             print(f"Auto-sync completed: {synced_count} servers imported")
