@@ -1872,6 +1872,12 @@ def auto_sync_on_startup():
                     server = existing_server
                 else:
                     print(f"Server {interface['name']} does not exist, creating...")
+                    # Get admin user
+                    admin = User.query.filter_by(username='admin').first()
+                    if not admin:
+                        print("Admin user not found, skipping server creation...")
+                        continue
+                    
                     # Create new server
                     server = WireGuardServer(
                         name=f"Imported {interface['name']}",
@@ -1880,7 +1886,7 @@ def auto_sync_on_startup():
                         public_key=interface.get('public-key', ''),
                         listen_port=int(interface.get('listen-port', 51820)),
                         address=interface.get('address', '10.0.0.1/24'),
-                        user_id=1,  # Use admin user ID
+                        user_id=admin.id,  # Use admin user ID
                         is_active=interface.get('disabled', 'true') == 'false'
                     )
                     db.session.add(server)
